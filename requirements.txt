@@ -32,7 +32,6 @@ Django==3.2
 django-core==1.4.1
 django-crispy-forms==1.11.2
 django-debug-toolbar==3.2.1
-django-faker==0.2
 django-filter==2.4.0
 django-localflavor==3.0.1
 django-ordered-model==3.4.3
