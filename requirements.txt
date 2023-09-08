@@ -14,7 +14,7 @@ backcall==0.2.0
 binaryornot==0.4.4
 blinker==1.6.2
 certifi==2020.12.5
-cffi==1.14.5
+cffi==1.15.1
 cfgv==3.2.0
 chardet==4.0.0
 click==8.1.3
