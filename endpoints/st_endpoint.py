@@ -10,7 +10,13 @@ api = Api(app)
 
 class St(Resource):
     def get(self):
-        return {"data": {"dat1": request.args.get("sidc")}}, 200
+        return {
+            "data": {
+                "dat1": military_symbol.get_symbol_svg_string_from_sidc(
+                    request.args.get("sidc")
+                )
+            }
+        }, 200
 
 
 class StSecond(Resource):
