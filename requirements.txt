@@ -71,6 +71,7 @@ lazy-object-proxy==1.6.0
 MarkupSafe==2.1.1
 matplotlib-inline==0.1.2
 mccabe==0.6.1
+military-symbol==1.0.7.post1
 msrest==0.6.21
 mysql-connector-python==8.0.24
 nodeenv==1.6.0

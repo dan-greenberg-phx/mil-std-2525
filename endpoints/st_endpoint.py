@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import pandas as pd
 import ast
+import military_symbol
 
 app = Flask(__name__)
 api = Api(app)
@@ -9,7 +10,7 @@ api = Api(app)
 
 class St(Resource):
     def get(self):
-        return {"data": {"dat1": "ok"}}, 200
+        return {"data": {"dat1": request.args.get("sidc")}}, 200
 
 
 class StSecond(Resource):
