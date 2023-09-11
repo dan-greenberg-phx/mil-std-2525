@@ -52,6 +52,7 @@ Faker==8.1.2
 filelock==3.0.12
 Flask==2.3.3
 Flask-RESTful==0.3.10
+flask-cors==4.0.0
 identify==2.2.4
 idna==2.10
 importlib-metadata==6.8.0
