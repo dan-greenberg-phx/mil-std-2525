@@ -1,43 +1,49 @@
 import logo from "./logo.svg";
 import React, { useState } from "react";
+import ms from "milsymbol";
 import "./App.css";
 
 function App() {
-  const [inputs, setInputs] = useState({});
-  const [img, setImg] = useState("");
+  const [file, setFile] = useState();
+  const [sidcList, setSidcList] = useState("");
+  const fileReader = new FileReader();
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch(`http://18.189.126.187:8080/st?sidc=${inputs.sidc}`)
-      .then((response) => response.json())
-      .then((data) => setImg(data))
-      .catch((err) => {
-        console.log(err.message);
-      });
+
+    if (file) {
+      fileReader.onload = function(event) {
+        setSidcList(event.target.result);
+      };
+      fileReader.readAsText(file);
+    }
   };
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+  const csvFileChange = (event) => {
+    setFile(event.target.files[0]);
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter SIDC:
-          <input
-            type="text"
-            name="sidc"
-            value={inputs.sidc || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <input type="submit" />
+      <form>
+        <input
+          type={"file"}
+          id={"sidCSV"}
+          accept={".txt"}
+          onChange={csvFileChange}
+        />
+        <button onClick={handleSubmit}>Display</button>
       </form>
-      {img !== "" && (
-        <img src={`data:image/svg+xml;utf8,${encodeURIComponent(img)}`} />
-      )}
+      {sidcList !== "" &&
+        sidcList
+          .split("\n")
+          .map((sidc) => (
+            <img
+              src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                new ms.Symbol(sidc).asSVG()
+              )}`}
+            />
+          ))}
     </div>
   );
 }
