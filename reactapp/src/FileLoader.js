@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Gallery } from "react-grid-gallery";
 import ms from "milsymbol";
-import "./App.css";
+import "./FileLoader.css";
 
 import Page from "./Page";
 
-function App() {
+function FileLoader() {
   const [file, setFile] = useState();
   const [sidcList, setSidcList] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,4 +88,4 @@ function App() {
   );
 }
 
-export default App;
+export default FileLoader;

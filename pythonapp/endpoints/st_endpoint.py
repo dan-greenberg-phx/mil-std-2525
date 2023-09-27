@@ -12,14 +12,20 @@ api = Api(app)
 
 class St(Resource):
     def get(self):
-        symbol: military_symbol.MilitarySymbol = military_symbol.MilitarySymbol(
-            symbol_schema=military_symbol.SymbolSchema.load_symbol_schema_from_file()
+        return (
+            military_symbol.get_symbol_class_from_name(
+                request.args.get("target_category")
+            ).get_sidc(),
+            200,
         )
-        symbol.create_from_sidc(request.args.get("sidc"))
-        print(type(symbol.get_svg()))
-        jsontext = symbol.get_svg()
-        print(jsontext)
-        return symbol.get_svg(), 200
+        # symbol: military_symbol.MilitarySymbol = military_symbol.MilitarySymbol(
+        #     symbol_schema=military_symbol.SymbolSchema.load_symbol_schema_from_file()
+        # )
+        # symbol.create_from_sidc(request.args.get("target_category"))
+        # print(type(symbol.get_svg()))
+        # jsontext = symbol.get_svg()
+        # print(jsontext)
+        # return symbol.get_svg(), 200
 
 
 class StSecond(Resource):
