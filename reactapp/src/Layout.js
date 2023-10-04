@@ -11,6 +11,9 @@ const Layout = () => {
           <li>
             <Link to="/nametosvg">Name To SVG</Link>
           </li>
+          <li>
+            <Link to="/selections">Selections</Link>
+          </li>
         </ul>
       </nav>
 

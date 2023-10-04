@@ -5,6 +5,7 @@ import "./index.css";
 import Layout from "./Layout";
 import FileLoader from "./FileLoader";
 import NameToSVG from "./NameToSVG";
+import Selections from "./Selections";
 import reportWebVitals from "./reportWebVitals";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<FileLoader />} />
           <Route path="nametosvg" element={<NameToSVG />} />
+          <Route path="selections" element={<Selections />} />
         </Route>
       </Routes>
     </BrowserRouter>
