@@ -81,7 +81,7 @@ oauthlib==3.1.0
 openstep-parser==1.5.3
 pandas==2.0.3
 parameterized==0.8.1
-parametrized==0.1
+parametrized==66.0.2
 parso==0.8.2
 parver==0.3.1
 pbxproj==3.4.0

@@ -75,6 +75,7 @@ function Selections() {
           src={`data:image/svg+xml;utf8,${encodeURIComponent(
             new ms.Symbol(sidc).asSVG()
           )}`}
+          alt={`${sidc}`}
         />
       )}
     </div>

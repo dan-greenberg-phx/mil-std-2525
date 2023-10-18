@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Page = ({
   imgsPerPage,
@@ -11,6 +11,10 @@ const Page = ({
   const pageNumbers = [];
   const [valInTextBox, setValInTextBox] = useState(currentPage);
   const lastPage = Math.ceil(totalImgs / imgsPerPage);
+
+  useEffect(() => {
+    setValInTextBox(currentPage);
+  }, [currentPage]);
 
   for (
     let i = Math.max(Number(currentPage) - 2, 1);
