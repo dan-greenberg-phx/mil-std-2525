@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Layout from "./Layout";
 import FileLoader from "./FileLoader";
-import NameToSVG from "./NameToSVG";
 import Selections from "./Selections";
 import reportWebVitals from "./reportWebVitals";
 
@@ -14,8 +13,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<FileLoader />} />
-          <Route path="nametosvg" element={<NameToSVG />} />
-          <Route path="selections" element={<Selections />} />
+          <Route
+            path="fileloaderproprietary"
+            element={<FileLoader proprietary={true} />}
+          />
+          <Route path="selectionsthirdparty" element={<Selections />} />
+          <Route
+            path="selectionsproprietary"
+            element={<Selections proprietary={true} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

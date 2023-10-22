@@ -6,13 +6,16 @@ const Layout = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">File Loader</Link>
+            <Link to="/">File Loader - Third Party</Link>
           </li>
           <li>
-            <Link to="/nametosvg">Name To SVG</Link>
+            <Link to="/fileloaderproprietary">File Loader - Internal</Link>
           </li>
           <li>
-            <Link to="/selections">Selections</Link>
+            <Link to="/selectionsthirdparty">Selections - Third Party</Link>
+          </li>
+          <li>
+            <Link to="/selectionsproprietary">Selections - Internal</Link>
           </li>
         </ul>
       </nav>

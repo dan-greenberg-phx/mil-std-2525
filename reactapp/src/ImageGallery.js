@@ -4,56 +4,99 @@ import ms from "milsymbol";
 
 import Page from "./Page";
 
+// const url = "http://18.189.126.187:8080/sidc";
+const url = "http://18.119.115.197:8080/sidc";
+
+async function getProprietarySidcs(sidcsToPull) {
+  const response = await fetch(`${url}?sidcsToPull=${sidcsToPull}`);
+  const proprietarySidcs = await response.json();
+  return proprietarySidcs;
+}
+
 const ImageGallery = ({
   sidcList,
+  proprietary = false,
   selectable = false,
   getSelectedImages = (selectedImages) => {},
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [validSidcList, setValidSidcList] = useState(
-    sidcList.filter((sidc) => new ms.Symbol(sidc).validIcon)
-  );
-  const [images, setImages] = useState(
-    validSidcList
-      .slice(25 * (currentPage - 1), 25 * currentPage)
-      .map((sidc) => {
-        return {
-          src: `data:image/svg+xml;utf8,${encodeURIComponent(
-            new ms.Symbol(sidc).asSVG()
-          )}`,
-          width: 75,
-          height: 60,
-          caption: sidc,
-          isSelected: false,
-        };
-      })
-  );
+  const [validSidcList, setValidSidcList] = useState([]);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
-    setImages(
-      validSidcList
-        .slice(25 * (currentPage - 1), 25 * currentPage)
-        .map((sidc) => {
-          return {
-            src: `data:image/svg+xml;utf8,${encodeURIComponent(
-              new ms.Symbol(sidc).asSVG()
-            )}`,
-            width: 75,
-            height: 60,
-            caption: sidc,
-            isSelected: false,
-          };
-        })
-    );
-  }, [validSidcList, currentPage]);
+    const imgOptions = { width: 75, height: 60, isSelected: false };
+    const prefix = "data:image/svg+xml;utf8,";
+    if (proprietary) {
+      getProprietarySidcs(sidcList.map((sidc) => `'${sidc}'`).toString()).then(
+        (data) => {
+          const svgs = {};
+          data.forEach((ele) => (svgs[ele[0]] = ele[1]));
+          setImages(
+            validSidcList
+              .slice(25 * (currentPage - 1), 25 * currentPage)
+              .map((sidc) => {
+                return {
+                  ...imgOptions,
+                  src: `${prefix}${encodeURIComponent(svgs[sidc])}`,
+                  caption: sidc,
+                };
+              })
+          );
+        }
+      );
+    } else {
+      setImages(
+        validSidcList
+          .slice(25 * (currentPage - 1), 25 * currentPage)
+          .map((sidc) => {
+            return {
+              ...imgOptions,
+              src: `${prefix}${encodeURIComponent(
+                new ms.Symbol(sidc).asSVG()
+              )}`,
+              caption: sidc,
+            };
+          })
+      );
+    }
+  }, [validSidcList, currentPage, proprietary]);
 
   useEffect(() => {
-    setValidSidcList(sidcList.filter((sidc) => new ms.Symbol(sidc).validIcon));
+    if (proprietary) {
+      getProprietarySidcs(sidcList.map((sidc) => `'${sidc}'`).toString()).then(
+        (data) =>
+          setValidSidcList(
+            sidcList.filter((sidc) => {
+              return data.map((ele) => ele[0]).includes(sidc);
+            })
+          )
+      );
+    } else {
+      setValidSidcList(
+        sidcList.filter((sidc) => new ms.Symbol(sidc).validIcon)
+      );
+    }
     setCurrentPage(1);
-  }, [sidcList]);
+  }, [sidcList, proprietary]);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const addToDb = () => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sidcMapping: validSidcList.map((validsidc) => {
+          return { sidc: validsidc, svg: new ms.Symbol(validsidc).asSVG() };
+        }),
+      }),
+    };
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.info(data))
+      .catch((err) => console.log(err.message));
   };
 
   const previousPage = () => {
@@ -79,19 +122,7 @@ const ImageGallery = ({
   return (
     <div>
       <Gallery
-        images={validSidcList
-          .slice(25 * (currentPage - 1), 25 * currentPage)
-          .map((sidc, idx) => {
-            return {
-              src: `data:image/svg+xml;utf8,${encodeURIComponent(
-                new ms.Symbol(sidc).asSVG()
-              )}`,
-              width: 75,
-              height: 60,
-              caption: sidc,
-              isSelected: images[idx]?.isSelected || false,
-            };
-          })}
+        images={images}
         rowHeight={60}
         enableImageSelection={selectable}
         onSelect={handleSelect}
@@ -104,6 +135,7 @@ const ImageGallery = ({
         previousPage={previousPage}
         nextPage={nextPage}
       />
+      {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}
     </div>
   );
 };

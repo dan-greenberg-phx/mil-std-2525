@@ -93,9 +93,7 @@ class ModifierTwo(Resource):
 
 class Sidc(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT sidc, svg FROM public.sidc WHERE sidc IN ({request.args.get("sidcsToPull")});'
-        )
+        cur.execute("SELECT sidc, svg FROM public.sidc;")
         return (cur.fetchall(), 200)
 
     def put(self):

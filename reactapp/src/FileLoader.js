@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ImageGallery from "./ImageGallery";
 
-function FileLoader() {
+const FileLoader = ({ proprietary = false }) => {
   const [file, setFile] = useState();
   const [sidcList, setSidcList] = useState([]);
   const fileReader = new FileReader();
@@ -12,7 +12,7 @@ function FileLoader() {
 
     if (file) {
       fileReader.onload = function(event) {
-        setSidcList(event.target.result.split("\n"));
+        setSidcList(event.target.result.split("\n").map((sidc) => sidc.trim()));
       };
       fileReader.readAsText(file);
     }
@@ -24,6 +24,7 @@ function FileLoader() {
 
   return (
     <div style={{ width: 380 }}>
+      {console.info(sidcList)}
       <br />
       <form>
         <input
@@ -36,9 +37,15 @@ function FileLoader() {
         <button onClick={handleSubmit}>Display</button>
       </form>
       <br />
-      {sidcList.length > 0 && <ImageGallery sidcList={sidcList} />}
+      {sidcList.length > 0 && (
+        <ImageGallery
+          key={proprietary}
+          proprietary={proprietary}
+          sidcList={sidcList}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default FileLoader;
