@@ -38,8 +38,8 @@ const Selections = ({ proprietary = false }) => {
     selection: {},
   });
 
-  // const url = "http://18.189.126.187:8080";
-  const url = "http://18.119.115.197:8080";
+  const url = "http://18.189.126.187:8080";
+  // const url = "http://18.119.115.197:8080";
 
   useEffect(() => {
     // load symbol sets

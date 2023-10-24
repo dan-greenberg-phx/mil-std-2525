@@ -4,8 +4,8 @@ import ms from "milsymbol";
 
 import Page from "./Page";
 
-// const url = "http://18.189.126.187:8080/sidc";
-const url = "http://18.119.115.197:8080/sidc";
+const url = "http://18.189.126.187:8080/sidc";
+// const url = "http://18.119.115.197:8080/sidc";
 
 async function getProprietarySidcs(sidcsToPull) {
   const response = await fetch(`${url}?sidcsToPull=${sidcsToPull}`);
