@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import psycopg2
+import openai
 
 app = Flask(__name__)
 CORS(app)
@@ -11,7 +12,7 @@ conn = psycopg2.connect(
     host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
     database="postgres",
     user="postgres",
-    password="IytN*~+&80UAD6ZqZb]O6i[>*j&C",
+    password="XP|11jljz-HUGdF.VPoSxb<?6cLn",
 )
 
 cur = conn.cursor()
@@ -113,6 +114,17 @@ class Sidc(Resource):
         return ("Inserted", 201)
 
 
+class OpenAi(Resource):
+    def get(self):
+        return (
+            openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": request.args.get("input")}],
+            ),
+            200,
+        )
+
+
 api.add_resource(Sym, "/sym")
 api.add_resource(Icon, "/icon")
 api.add_resource(FirstId, "/firstid")
@@ -123,6 +135,7 @@ api.add_resource(EchelonMobility, "/echelonmobility")
 api.add_resource(ModifierOne, "/modifierone")
 api.add_resource(ModifierTwo, "/modifiertwo")
 api.add_resource(Sidc, "/sidc")
+api.add_resource(OpenAi, "/openai")
 
 if __name__ == "__main__":
     app.run()

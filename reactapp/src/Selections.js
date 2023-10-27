@@ -213,7 +213,7 @@ const Selections = ({ proprietary = false }) => {
   ]);
 
   return (
-    <div style={{ width: 380 }}>
+    <div style={{ width: 380, display: "table", content: "", clear: "both" }}>
       <br />
       <form>
         <label>

@@ -59,7 +59,7 @@ const ImageGallery = ({
           })
       );
     }
-  }, [validSidcList, currentPage, proprietary]);
+  }, [validSidcList, sidcList, currentPage, proprietary]);
 
   useEffect(() => {
     if (proprietary) {

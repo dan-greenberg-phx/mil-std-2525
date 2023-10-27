@@ -24,7 +24,6 @@ const FileLoader = ({ proprietary = false }) => {
 
   return (
     <div style={{ width: 380 }}>
-      {console.info(sidcList)}
       <br />
       <form>
         <input
