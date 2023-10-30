@@ -92,12 +92,25 @@ class ModifierTwo(Resource):
         return (result if len(result) > 0 else [["00", "Unspecified"]], 200)
 
 
+class ValidSidc(Resource):
+    def get(self):
+        cur.execute("SELECT sidc FROM public.sidc;")
+        return (cur.fetchall(), 200)
+
+
 class Sidc(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT sidc, svg FROM public.sidc WHERE sidc IN ({request.args.get("sidcsToPull")});'
+        cur.execute("SELECT sidc, svg FROM public.sidc;")
+        sidcSvgMapping = cur.fetchall()
+        return (
+            {
+                k: v
+                for (k, v) in zip(
+                    [a[0] for a in sidcSvgMapping], [a[1] for a in sidcSvgMapping]
+                )
+            },
+            200,
         )
-        return (cur.fetchall(), 200)
 
     def put(self):
         vals = ",".join(
@@ -118,7 +131,7 @@ class OpenAi(Resource):
     def get(self):
         return (
             openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo-16k-0613",
                 messages=[{"role": "user", "content": request.args.get("input")}],
             ),
             200,
@@ -135,6 +148,7 @@ api.add_resource(EchelonMobility, "/echelonmobility")
 api.add_resource(ModifierOne, "/modifierone")
 api.add_resource(ModifierTwo, "/modifiertwo")
 api.add_resource(Sidc, "/sidc")
+api.add_resource(ValidSidc, "/validsidc")
 api.add_resource(OpenAi, "/openai")
 
 if __name__ == "__main__":

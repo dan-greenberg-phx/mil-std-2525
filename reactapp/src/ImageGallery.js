@@ -7,8 +7,14 @@ import Page from "./Page";
 const url = "http://18.189.126.187:8080/sidc";
 // const url = "http://18.119.115.197:8080/sidc";
 
-async function getProprietarySidcs(sidcsToPull) {
-  const response = await fetch(`${url}?sidcsToPull=${sidcsToPull}`);
+async function getProprietarySidcs() {
+  const response = await fetch("http://18.189.126.187:8080/validsidc");
+  const proprietarySidcs = await response.json();
+  return proprietarySidcs;
+}
+
+async function getProprietarySidcs2() {
+  const response = await fetch("http://18.189.126.187:8080/sidc");
   const proprietarySidcs = await response.json();
   return proprietarySidcs;
 }
@@ -27,23 +33,19 @@ const ImageGallery = ({
     const imgOptions = { width: 75, height: 60, isSelected: false };
     const prefix = "data:image/svg+xml;utf8,";
     if (proprietary) {
-      getProprietarySidcs(sidcList.map((sidc) => `'${sidc}'`).toString()).then(
-        (data) => {
-          const svgs = {};
-          data.forEach((ele) => (svgs[ele[0]] = ele[1]));
-          setImages(
-            validSidcList
-              .slice(25 * (currentPage - 1), 25 * currentPage)
-              .map((sidc) => {
-                return {
-                  ...imgOptions,
-                  src: `${prefix}${encodeURIComponent(svgs[sidc])}`,
-                  caption: sidc,
-                };
-              })
-          );
-        }
-      );
+      getProprietarySidcs2().then((data) => {
+        setImages(
+          validSidcList
+            .slice(25 * (currentPage - 1), 25 * currentPage)
+            .map((sidc) => {
+              return {
+                ...imgOptions,
+                src: `${prefix}${encodeURIComponent(data[sidc])}`,
+                caption: sidc,
+              };
+            })
+        );
+      });
     } else {
       setImages(
         validSidcList
@@ -63,13 +65,12 @@ const ImageGallery = ({
 
   useEffect(() => {
     if (proprietary) {
-      getProprietarySidcs(sidcList.map((sidc) => `'${sidc}'`).toString()).then(
-        (data) =>
-          setValidSidcList(
-            sidcList.filter((sidc) => {
-              return data.map((ele) => ele[0]).includes(sidc);
-            })
-          )
+      getProprietarySidcs().then((data) =>
+        setValidSidcList(
+          sidcList.filter((sidc) => {
+            return data.flat().includes(sidc);
+          })
+        )
       );
     } else {
       setValidSidcList(
