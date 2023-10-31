@@ -8,107 +8,160 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-conn = psycopg2.connect(
-    host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
-    database="postgres",
-    user="postgres",
-    password="XP|11jljz-HUGdF.VPoSxb<?6cLn",
-)
 
+def get_connection():
+    return psycopg2.connect(
+        host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
+        database="postgres",
+        user="postgres",
+        password="XP|11jljz-HUGdF.VPoSxb<?6cLn",
+    )
+
+
+# set up connection
+conn = get_connection()
 cur = conn.cursor()
+
+# pull symbol
+cur.execute("SELECT symbolset, symbolsetname FROM public.symbolset;")
+symbols = cur.fetchall()
+
+# pull icon
+cur.execute(
+    "SELECT symbolset, JSON_AGG(ARRAY[code, entity||' '||entity_type||' '||entity_subtype]) FROM public.icon GROUP BY symbolset;"
+)
+icons = {data[0]: data[1] for data in cur.fetchall()}
+
+# pull firstid
+cur.execute("SELECT code, description FROM public.firstid;")
+firstids = cur.fetchall()
+
+# pull affiliation
+cur.execute("SELECT code, description FROM public.affiliation;")
+affiliations = cur.fetchall()
+
+# pull status
+cur.execute("SELECT status, description FROM public.status;")
+statuses = cur.fetchall()
+
+# pull hqtfdummy
+cur.execute(
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.hqtfdummy GROUP BY symbolset;"
+)
+hqtfdummys = {data[0]: data[1] for data in cur.fetchall()}
+
+# pull echelonmobility
+cur.execute(
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.echelonmobility GROUP BY symbolset;"
+)
+echelonmobilities = {data[0]: data[1] for data in cur.fetchall()}
+
+# pull modifierone
+cur.execute(
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.modifierone GROUP BY symbolset;"
+)
+modifierones = {data[0]: data[1] for data in cur.fetchall()}
+
+# pull modifiertwo
+cur.execute(
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.modifiertwo GROUP BY symbolset;"
+)
+modifiertwos = {data[0]: data[1] for data in cur.fetchall()}
+
+# pull sidcs
+cur.execute("SELECT sidc, svg from public.sidc;")
+sidcs = cur.fetchall()
+
+# close connection
+conn.close()
+
+
+def refresh_sidcs():
+    global sidcs
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT sidc, svg from public.sidc;")
+    sidcs = cur.fetchall()
+    conn.close()
+
+
+def post_data(query):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
 
 
 class Sym(Resource):
     def get(self):
-        cur.execute("SELECT symbolset, symbolsetname FROM public.symbolset;")
-        return (cur.fetchall(), 200)
+        return (
+            symbols,
+            200,
+        )
 
 
 class Icon(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT code, entity||\' \'||entity_type||\' \'||entity_subtype FROM public.icon WHERE symbolset=\'{request.args.get("sym")}\';'
+        return (
+            icons.get(request.args.get("sym")),
+            200,
         )
-        return (cur.fetchall(), 200)
 
 
 class FirstId(Resource):
     def get(self):
-        cur.execute("SELECT code, description FROM public.firstid;")
-        return (cur.fetchall(), 200)
+        return (firstids, 200)
 
 
 class Affiliation(Resource):
     def get(self):
-        cur.execute("SELECT code, description FROM public.affiliation;")
-        return (cur.fetchall(), 200)
+        return (affiliations, 200)
 
 
 class Status(Resource):
     def get(self):
-        cur.execute("SELECT status, description FROM public.status;")
-        return (cur.fetchall(), 200)
+        return (statuses, 200)
 
 
 class HQTFDummy(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT code, description FROM public.hqtfdummy WHERE symbolset=\'{request.args.get("sym")}\';'
-        )
-        result = cur.fetchall()
+        result = hqtfdummys.get(request.args.get("sym"))
         return (
-            result if len(result) > 0 else [["0", "not applicable"]],
+            result if result is not None else [["0", "not applicable"]],
             200,
         )
 
 
 class EchelonMobility(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT code, description FROM public.echelonmobility WHERE symbolset=\'{request.args.get("sym")}\';'
-        )
-        result = cur.fetchall()
+        result = echelonmobilities.get(request.args.get("sym"))
         return (
-            result if len(result) > 0 else [["00", "unspecified"]],
+            result if result is not None else [["00", "unspecified"]],
             200,
         )
 
 
 class ModifierOne(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT code, description FROM public.modifierone WHERE symbolset=\'{request.args.get("sym")}\';'
-        )
-        result = cur.fetchall()
-        return (result if len(result) > 0 else [["00", "Unspecified"]], 200)
+        result = modifierones.get(request.args.get("sym"))
+        return (result if result is not None else [["00", "Unspecified"]], 200)
 
 
 class ModifierTwo(Resource):
     def get(self):
-        cur.execute(
-            f'SELECT code, description FROM public.modifiertwo WHERE symbolset=\'{request.args.get("sym")}\';'
-        )
-        result = cur.fetchall()
-        return (result if len(result) > 0 else [["00", "Unspecified"]], 200)
+        result = modifiertwos.get(request.args.get("sym"))
+        return (result if result is not None else [["00", "Unspecified"]], 200)
 
 
 class ValidSidc(Resource):
     def get(self):
-        cur.execute("SELECT sidc FROM public.sidc;")
-        return (cur.fetchall(), 200)
+        return ([a[0] for a in sidcs], 200)
 
 
 class Sidc(Resource):
     def get(self):
-        cur.execute("SELECT sidc, svg FROM public.sidc;")
-        sidcSvgMapping = cur.fetchall()
         return (
-            {
-                k: v
-                for (k, v) in zip(
-                    [a[0] for a in sidcSvgMapping], [a[1] for a in sidcSvgMapping]
-                )
-            },
+            {k: v for (k, v) in sidcs},
             200,
         )
 
@@ -119,11 +172,10 @@ class Sidc(Resource):
                 for a in request.get_json().get("sidcMapping")
             ]
         )
-        cur.execute(
+        post_data(
             f"INSERT INTO public.sidc (sidc, svg) VALUES {vals} ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
         )
-        conn.commit()
-
+        refresh_sidcs()
         return ("Inserted", 201)
 
 

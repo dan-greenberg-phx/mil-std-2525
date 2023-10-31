@@ -4,20 +4,8 @@ import ms from "milsymbol";
 
 import Page from "./Page";
 
-const url = "http://18.189.126.187:8080/sidc";
-// const url = "http://18.119.115.197:8080/sidc";
-
-async function getProprietarySidcs() {
-  const response = await fetch("http://18.189.126.187:8080/validsidc");
-  const proprietarySidcs = await response.json();
-  return proprietarySidcs;
-}
-
-async function getProprietarySidcs2() {
-  const response = await fetch("http://18.189.126.187:8080/sidc");
-  const proprietarySidcs = await response.json();
-  return proprietarySidcs;
-}
+const url = "http://18.189.126.187:8080";
+// const url = "http://18.119.115.197:8080";
 
 const ImageGallery = ({
   sidcList,
@@ -28,57 +16,61 @@ const ImageGallery = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [validSidcList, setValidSidcList] = useState([]);
   const [images, setImages] = useState([]);
+  const [proprietarySvgs, setProprietarySvgs] = useState({});
+  const [proprietarySidcs, setProprietarySidcs] = useState([]);
 
   useEffect(() => {
-    const imgOptions = { width: 75, height: 60, isSelected: false };
-    const prefix = "data:image/svg+xml;utf8,";
-    if (proprietary) {
-      getProprietarySidcs2().then((data) => {
-        setImages(
-          validSidcList
-            .slice(25 * (currentPage - 1), 25 * currentPage)
-            .map((sidc) => {
-              return {
-                ...imgOptions,
-                src: `${prefix}${encodeURIComponent(data[sidc])}`,
-                caption: sidc,
-              };
-            })
-        );
-      });
-    } else {
-      setImages(
-        validSidcList
-          .slice(25 * (currentPage - 1), 25 * currentPage)
-          .map((sidc) => {
-            return {
-              ...imgOptions,
-              src: `${prefix}${encodeURIComponent(
-                new ms.Symbol(sidc).asSVG()
-              )}`,
-              caption: sidc,
-            };
-          })
-      );
+    async function fetchSvgs() {
+      try {
+        const response = await fetch(`${url}/sidc`);
+        const json = await response.json();
+        setProprietarySvgs(json);
+      } catch (e) {
+        console.info(e);
+      }
     }
-  }, [validSidcList, sidcList, currentPage, proprietary]);
+
+    async function fetchSidcs() {
+      try {
+        const response = await fetch(`${url}/validsidc`);
+        const json = await response.json();
+        setProprietarySidcs(json);
+      } catch (e) {
+        console.info(e);
+      }
+    }
+    fetchSvgs();
+    fetchSidcs();
+  }, []);
 
   useEffect(() => {
-    if (proprietary) {
-      getProprietarySidcs().then((data) =>
-        setValidSidcList(
-          sidcList.filter((sidc) => {
-            return data.flat().includes(sidc);
-          })
-        )
-      );
-    } else {
-      setValidSidcList(
-        sidcList.filter((sidc) => new ms.Symbol(sidc).validIcon)
-      );
-    }
+    setImages(
+      validSidcList
+        .slice(25 * (currentPage - 1), 25 * currentPage)
+        .map((sidc) => {
+          return {
+            width: 75,
+            height: 60,
+            src: `data:image/svg+xml;utf8,${encodeURIComponent(
+              proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
+            )}`,
+            caption: sidc,
+            isSelected: false,
+          };
+        })
+    );
+  }, [validSidcList, currentPage, proprietarySvgs, proprietary]);
+
+  useEffect(() => {
+    setValidSidcList(
+      sidcList.filter((sidc) =>
+        proprietary
+          ? proprietarySidcs.includes(sidc)
+          : new ms.Symbol(sidc).validIcon
+      )
+    );
     setCurrentPage(1);
-  }, [sidcList, proprietary]);
+  }, [sidcList, proprietarySidcs, proprietary]);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -94,7 +86,7 @@ const ImageGallery = ({
         }),
       }),
     };
-    fetch(url, requestOptions)
+    fetch(`${url}/sidc`, requestOptions)
       .then((response) => response.json())
       .then((data) => console.info(data))
       .catch((err) => console.log(err.message));
