@@ -14,7 +14,7 @@ def get_connection():
         host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
         database="postgres",
         user="postgres",
-        password="XP|11jljz-HUGdF.VPoSxb<?6cLn",
+        password="q44%Wjv{32cOTR-buJr*bQIjb{}M",
     )
 
 
@@ -158,6 +158,12 @@ class ValidSidc(Resource):
         return ([a[0] for a in sidcs], 200)
 
 
+class RefreshSidc(Resource):
+    def get(self):
+        refresh_sidcs()
+        return ("Refreshed", 200)
+
+
 class Sidc(Resource):
     def get(self):
         return (
@@ -175,8 +181,24 @@ class Sidc(Resource):
         post_data(
             f"INSERT INTO public.sidc (sidc, svg) VALUES {vals} ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
         )
-        refresh_sidcs()
+        # conn = get_connection()
+        # cur = conn.cursor()
+        # vals = [
+        #     f"('{a.get('sidc')}','{a.get('svg')}')"
+        #     for a in request.get_json().get("sidcMapping")
+        # ]
+        # psycopg2.execute_values(
+        #     cur,
+        #     "INSERT INTO public.sidc (sidc, svg) VALUES %s ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
+        #     vals,
+        # )
+        # conn.commit()
+        # post_data(
+        #     f"INSERT INTO public.sidc (sidc, svg) VALUES {vals} ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
+        # )
+        # refresh_sidcs()
         return ("Inserted", 201)
+        # return ("Inserted", 201)
 
 
 class OpenAi(Resource):
@@ -201,6 +223,7 @@ api.add_resource(ModifierOne, "/modifierone")
 api.add_resource(ModifierTwo, "/modifiertwo")
 api.add_resource(Sidc, "/sidc")
 api.add_resource(ValidSidc, "/validsidc")
+api.add_resource(RefreshSidc, "/refreshsidc")
 api.add_resource(OpenAi, "/openai")
 
 if __name__ == "__main__":

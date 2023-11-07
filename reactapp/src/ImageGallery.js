@@ -17,25 +17,34 @@ const ImageGallery = ({
   const [validSidcList, setValidSidcList] = useState([]);
   const [images, setImages] = useState([]);
   const [proprietarySvgs, setProprietarySvgs] = useState({});
-  const [proprietarySidcs, setProprietarySidcs] = useState([]);
+  const [proprietarySidcs, setProprietarySidcs] = useState(new Set());
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
+    const timer = setTimeout(() => abortController.abort(), 20000);
+
     async function fetchSvgs() {
       try {
-        const response = await fetch(`${url}/sidc`);
+        const response = await fetch(`${url}/sidc`, { signal });
         const json = await response.json();
+        clearTimeout(timer);
         setProprietarySvgs(json);
       } catch (e) {
+        clearTimeout(timer);
         console.info(e);
       }
     }
 
     async function fetchSidcs() {
       try {
-        const response = await fetch(`${url}/validsidc`);
+        const response = await fetch(`${url}/validsidc`, { signal });
         const json = await response.json();
-        setProprietarySidcs(json);
+        clearTimeout(timer);
+        setProprietarySidcs(new Set(json));
       } catch (e) {
+        clearTimeout(timer);
         console.info(e);
       }
     }
@@ -64,9 +73,7 @@ const ImageGallery = ({
   useEffect(() => {
     setValidSidcList(
       sidcList.filter((sidc) =>
-        proprietary
-          ? proprietarySidcs.includes(sidc)
-          : new ms.Symbol(sidc).validIcon
+        proprietary ? proprietarySidcs.has(sidc) : new ms.Symbol(sidc).validIcon
       )
     );
     setCurrentPage(1);
@@ -76,21 +83,59 @@ const ImageGallery = ({
     setCurrentPage(pageNumber);
   };
 
-  const addToDb = () => {
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sidcMapping: validSidcList.map((validsidc) => {
-          return { sidc: validsidc, svg: new ms.Symbol(validsidc).asSVG() };
+  async function addToDb() {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+    const sidcMapping = validSidcList.map((validsidc) => {
+      return { sidc: validsidc, svg: new ms.Symbol(validsidc).asSVG() };
+    });
+    const timer = setTimeout(() => abortController.abort(), 50000);
+    const chunkSize = 500;
+    for (let i = 0; i < sidcMapping.length; i += chunkSize) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sidcMapping: sidcMapping.slice(i, i + chunkSize),
         }),
-      }),
-    };
-    fetch(`${url}/sidc`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.info(data))
-      .catch((err) => console.log(err.message));
-  };
+        signal,
+      };
+      await fetch(`${url}/sidc`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          clearTimeout(timer);
+          console.info(data);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          console.log(err.message);
+        });
+      fetch(`${url}/refreshsidc`)
+        .then((response) => response.json())
+        .then((data) => console.info(data))
+        .catch((err) => console.info(err.message));
+    }
+    // const requestOptions = {
+    //   method: "PUT",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     sidcMapping: validSidcList.map((validsidc) => {
+    //       return { sidc: validsidc, svg: new ms.Symbol(validsidc).asSVG() };
+    //     }),
+    //   }),
+    //   signal,
+    // };
+    // fetch(`${url}/sidc`, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     clearTimeout(timer);
+    //     console.info(data);
+    //   })
+    //   .catch((err) => {
+    //     clearTimeout(timer);
+    //     console.log(err.message);
+    //   });
+  }
 
   const previousPage = () => {
     if (currentPage !== 1) {
