@@ -4,8 +4,8 @@ import ms from "milsymbol";
 
 import Page from "./Page";
 
-const url = "http://18.189.126.187:8080";
-// const url = "http://18.119.115.197:8080";
+//const url = "http://18.189.126.187:8080";
+const url = "http://localhost:8080";
 
 const ImageGallery = ({
   sidcList,
@@ -158,10 +158,14 @@ const ImageGallery = ({
   };
 
   return (
-    <div>
+    <div id={"imgGalleryDiv"} style={{
+
+     justifyContent: "center",
+      alignItems: "center"
+    }}>
       <Gallery
         images={images}
-        rowHeight={60}
+        rowHeight={250}
         enableImageSelection={selectable}
         onSelect={handleSelect}
       />
@@ -173,7 +177,7 @@ const ImageGallery = ({
         previousPage={previousPage}
         nextPage={nextPage}
       />
-      {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}
+      {/*{!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}*/}
     </div>
   );
 };

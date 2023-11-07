@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { Container, Header, Footer, Content,
+  Sidebar } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 
 const Layout = () => {
   const [openAiQuestion, setOpenAiQuestion] = useState("");
   const [openAiOutput, setOpenAiOutput] = useState("");
 
-  const url = "http://18.189.126.187:8080";
-  // const url = "http://18.119.115.197:8080";
+ // const url = "http://18.189.126.187:8080";
+   const url = "http://localhost:8080";
 
   const askAi = () => {
     fetch(`${url}/openai?input=${encodeURIComponent(openAiQuestion)}`)
@@ -16,9 +19,20 @@ const Layout = () => {
   };
 
   return (
-    <div>
-      <div style={{ display: "table", clear: "both", content: "" }}>
-        <div style={{ float: "left", width: "35%" }}>
+      <center>
+    <div id={"layoutDiv"} style={{ marginTop: 50, width: "100%",height: "100%" }}>
+      <Container>
+        <Sidebar
+            style={{
+                float: "left",
+                width:"fit-content",
+              backgroundColor: "orange",
+              padding: 20,
+              color: "white"
+            }}
+        >
+
+        <div style={{ float: "left", width: "fit-content" }}>
           <nav>
             <ul>
               <li>
@@ -36,29 +50,21 @@ const Layout = () => {
             </ul>
           </nav>
         </div>
-        <div style={{ float: "left", width: "65%" }}>
-          <label htmlFor="openai">Got a question? Ask OpenAI</label>
-          <textarea
-            rows="4"
-            cols="50"
-            id="openai"
-            name="openai"
-            value={openAiQuestion}
-            onChange={(e) => setOpenAiQuestion(e.target.value)}
-          />
-          <br />
-          <button onClick={askAi}>Ask OpenAI</button>
+
+
+        </Sidebar>
+      </Container>
+        <div id={"outletDiv"} style={{
+            display: "flex",
+            marginTop: "20px"
+        }}>
+            <Outlet />
         </div>
-      </div>
-      <div style={{ display: "table", clear: "both", content: "" }}>
-        <div style={{ float: "left", width: "50%" }}>
-          <Outlet />
-        </div>
-        <div style={{ float: "left", width: "50%" }}>
-          <p style={{ width: 440 }}>{openAiOutput}</p>
-        </div>
-      </div>
+
     </div>
+
+
+    </center>
   );
 };
 

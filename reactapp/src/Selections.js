@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import Select from "react-select";
 import ImageGallery from "./ImageGallery";
+import { Container, Header, Footer, Content,
+    Sidebar } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 
 const Selections = ({ proprietary = false }) => {
   const [sidcList, setSidcList] = useState([]);
@@ -38,8 +41,8 @@ const Selections = ({ proprietary = false }) => {
     selection: {},
   });
 
-  const url = "http://18.189.126.187:8080";
-  // const url = "http://18.119.115.197:8080";
+  //const url = "http://18.189.126.187:8080";
+  const url = "http://localhost:8080";
 
   useEffect(() => {
     // load symbol sets
@@ -213,9 +216,18 @@ const Selections = ({ proprietary = false }) => {
   ]);
 
   return (
-    <div style={{ width: 380, display: "table", content: "", clear: "both" }}>
+      <Fragment>
+    <div id={"selectionsDiv"} style={{
+        width: "500px",
+        height: "1000px",
+        backgroundColor: "beige"
+    }}>
       <br />
-      <form>
+      <form style={{
+          width: "450px",
+          marginLeft: "25px",
+          marginRight: "25px"
+      }}>
         <label>
           Symbol Set:
           <Select
@@ -334,14 +346,31 @@ const Selections = ({ proprietary = false }) => {
         </label>
       </form>
       <br />
-      {sidcList.length > 0 && (
-        <ImageGallery
-          key={proprietary}
-          proprietary={proprietary}
-          sidcList={sidcList}
-        />
-      )}
-    </div>
+
+
+
+      </div>
+          <div id={"selImgDiv"}
+          style={{
+              flexGrow: "1",
+              marginTop: "5%",
+              marginLeft: "27%",
+              justifyContent: "center",
+              alignItems: "center"
+          }}>
+              {sidcList.length > 0 && (
+
+                  <ImageGallery     style={{justifyContent: "center",
+                  alignItems: "center"}}
+                      key={proprietary}
+                      proprietary={proprietary}
+                      sidcList={sidcList}
+                  />
+
+
+    )}
+          </div>
+      </Fragment>
   );
 };
 

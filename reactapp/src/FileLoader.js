@@ -22,8 +22,8 @@ const FileLoader = ({ proprietary = false }) => {
     setFile(event.target.files[0]);
   };
 
-  return (
-    <div style={{ width: 380 }}>
+  return (<div>here I am</div>
+/*    <div style={{ width: 380 }}>
       <br />
       <form>
         <input
@@ -43,7 +43,7 @@ const FileLoader = ({ proprietary = false }) => {
           sidcList={sidcList}
         />
       )}
-    </div>
+    </div>*/
   );
 };
 
