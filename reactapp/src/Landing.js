@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import landingLogo from "./landing-logo.png";
+import landingLogo from "./landing-logo-wl.png";
 import { useState } from "react";
 import Layout from "./Layout";
 
@@ -14,7 +14,7 @@ const Landing = () => {
             width: "100%",
             height: "100%",
             marginTop: "10%",
-            backgroundColor: "#6F9B76"
+            backgroundColor: "#4b5320"
         }}>
             <Link to="/layout/selectionsthirdparty"> <img src={landingLogo} width={"350px"} height={"277px"}/></Link>
         </div>

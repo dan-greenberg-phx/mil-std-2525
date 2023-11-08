@@ -3,7 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import { Container, Header, Footer, Content,
   Sidebar } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import landingLogo from "./landing-logo.png";
+import landingLogo from "./landing-logo-wl.png";
 import fileupload from "./fileupload.png";
 
 const Layout = () => {
@@ -24,14 +24,16 @@ const Layout = () => {
       <center>
     <div id={"layoutDiv"} style={{ marginTop: 30, width: "100%" }}>
       <Container id={"layoutContainer"}
-      style={{justifyContent: "left",
+      style={{
+        justifyContent: "left",
+        backgroundColor: "#4b5320",
       width: "100%"}}>
 
 
         <div id={"navDiv"} style={{
             display: "flex",
             marginLeft: "35px",
-            backgroundColor: "#D4E2F5",
+            backgroundColor: "#4b5320",
             float: "left",
             width: "500px",
         height: "165px"}}>
@@ -45,10 +47,10 @@ const Layout = () => {
 
 
             <label htmlFor="actual-btn" style={{
-              backgroundColor: "#2874D6",
+              backgroundColor: "beige",
               marginLeft: "145px",
               float: "right",
-              color: "white",
+              color: "black",
               padding: "0.5rem",
               fontFamily: "sans-serif",
               borderRadius: "0.3rem",

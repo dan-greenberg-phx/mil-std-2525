@@ -159,7 +159,8 @@ const ImageGallery = ({
 
   return (
     <div id={"imgGalleryDiv"} style={{
-
+      marginTop: "5%",
+      marginLeft: "27%",
      justifyContent: "center",
       alignItems: "center"
     }}>
@@ -177,7 +178,7 @@ const ImageGallery = ({
         previousPage={previousPage}
         nextPage={nextPage}
       />
-      {/*{!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}*/}
+      {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}
     </div>
   );
 };

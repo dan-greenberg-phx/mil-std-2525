@@ -375,15 +375,16 @@ const Selections = ({ proprietary = false }) => {
       </div>
           <div id={"selImgDiv"}
           style={{
+                backgroundColor: "#F4F6F7",
               flexGrow: "1",
-              marginTop: "5%",
-              marginLeft: "27%",
+
               justifyContent: "center",
               alignItems: "center"
           }}>
               {sidcList.length > 0 && (
 
-                  <ImageGallery     style={{justifyContent: "center",
+                  <ImageGallery   id={"imgGal"}  style={{
+                      justifyContent: "center",
                   alignItems: "center"}}
                       key={proprietary}
                       proprietary={proprietary}
