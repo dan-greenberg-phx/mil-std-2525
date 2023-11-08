@@ -5,26 +5,22 @@ import "./index.css";
 import Layout from "./Layout";
 import FileLoader from "./FileLoader";
 import Selections from "./Selections";
+import Landing from "./Landing";
 import reportWebVitals from "./reportWebVitals";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<FileLoader />} />
-          <Route
-            path="fileloaderproprietary"
-            element={<FileLoader proprietary={true} />}
-          />
-          <Route path="selectionsthirdparty" element={<Selections />} />
-          <Route
-            path="selectionsproprietary"
-            element={<Selections proprietary={true} />}
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/layout" element={<Layout />}>
+                  <Route index element={<FileLoader />} />
+                  <Route path="fileloaderproprietary" element={<FileLoader proprietary={true} />}/>
+                  <Route path="selectionsthirdparty" element={<Selections />} />
+                  <Route path="selectionsproprietary" element={<Selections proprietary={true} />}/>
+              </Route>
+          </Routes>
+      </BrowserRouter>
   );
 }
 

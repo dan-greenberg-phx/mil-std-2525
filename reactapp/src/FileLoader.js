@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ImageGallery from "./ImageGallery";
+import fileupload from "./fileupload.png";
 
 const FileLoader = ({ proprietary = false }) => {
   const [file, setFile] = useState();
@@ -22,17 +23,29 @@ const FileLoader = ({ proprietary = false }) => {
     setFile(event.target.files[0]);
   };
 
-  return (<div>here I am</div>
-/*    <div style={{ width: 380 }}>
+  return (
+   <div style={{ width: 380 }}>
       <br />
       <form>
-        <input
+        <input type="file" id="actual-btn" hidden/>
+
+
+        <label htmlFor="actual-btn" style={{
+          backgroundColor: "indigo",
+          color: "white",
+          padding: "0.5rem",
+          fontFamily: "sans-serif",
+          borderRadius: "0.3rem",
+          cursor: "pointer",
+          marginTop: "1rem"
+        }}>Choose File</label>
+{/*        <input
           type={"file"}
           id={"sidcFile"}
           accept={".txt"}
           onChange={csvFileChange}
           onClick={(event) => (event.target.value = null)}
-        />
+        />*/}
         <button onClick={handleSubmit}>Display</button>
       </form>
       <br />
@@ -43,7 +56,7 @@ const FileLoader = ({ proprietary = false }) => {
           sidcList={sidcList}
         />
       )}
-    </div>*/
+    </div>
   );
 };
 

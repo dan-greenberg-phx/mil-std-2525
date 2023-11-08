@@ -1,12 +1,28 @@
 import React, {useState, useEffect, Fragment} from "react";
 import Select from "react-select";
 import ImageGallery from "./ImageGallery";
+
 import { Container, Header, Footer, Content,
     Sidebar } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 
 const Selections = ({ proprietary = false }) => {
-  const [sidcList, setSidcList] = useState([]);
+
+    const colourStyles = {
+        control: styles => ({ ...styles, backgroundColor: 'white' }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            const color = data.color;
+            return {
+                ...styles,
+                backgroundColor: isDisabled ? 'red' : "blue",
+                color: '#FFF',
+                cursor: isDisabled ? 'not-allowed' : 'default',
+
+            };
+        },
+
+    };
+    const [sidcList, setSidcList] = useState([]);
   const [symset, setSymset] = useState({
     options: [],
     selection: {},
@@ -188,6 +204,7 @@ const Selections = ({ proprietary = false }) => {
       ? [echelonmobility.selection.value]
       : echelonmobility.options.map((em) => em.value);
 
+
     for (var fid of firstids) {
       for (var aff of affiliations) {
         for (var sts of statuses) {
@@ -218,6 +235,7 @@ const Selections = ({ proprietary = false }) => {
   return (
       <Fragment>
     <div id={"selectionsDiv"} style={{
+        marginLeft: "35px",
         width: "500px",
         height: "1000px",
         backgroundColor: "beige"
@@ -231,6 +249,7 @@ const Selections = ({ proprietary = false }) => {
         <label>
           Symbol Set:
           <Select
+
             options={symset.options}
             isSearchable={true}
             value={symset.selection}
@@ -310,6 +329,7 @@ const Selections = ({ proprietary = false }) => {
         <label>
           Echelon/Mobility:
           <Select
+              menuPlacement={"top"}
             options={echelonmobility.options}
             value={echelonmobility.selection}
             isSearchable={true}
@@ -325,6 +345,7 @@ const Selections = ({ proprietary = false }) => {
         <label>
           Modifier 1:
           <Select
+              menuPlacement={"top"}
             options={modifierone.options}
             value={modifierone.selection}
             isSearchable={true}
@@ -336,6 +357,8 @@ const Selections = ({ proprietary = false }) => {
         <label>
           Modifier 2:
           <Select
+
+              menuPlacement={"top"}
             options={modifiertwo.options}
             value={modifiertwo.selection}
             isSearchable={true}

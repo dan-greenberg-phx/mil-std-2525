@@ -1,8 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Container, Header, Footer, Content,
   Sidebar } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
+import landingLogo from "./landing-logo.png";
+import fileupload from "./fileupload.png";
 
 const Layout = () => {
   const [openAiQuestion, setOpenAiQuestion] = useState("");
@@ -20,43 +22,60 @@ const Layout = () => {
 
   return (
       <center>
-    <div id={"layoutDiv"} style={{ marginTop: 50, width: "100%",height: "100%" }}>
-      <Container>
-        <Sidebar
-            style={{
-                float: "left",
-                width:"fit-content",
-              backgroundColor: "orange",
-              padding: 20,
-              color: "white"
-            }}
-        >
+    <div id={"layoutDiv"} style={{ marginTop: 30, width: "100%" }}>
+      <Container id={"layoutContainer"}
+      style={{justifyContent: "left",
+      width: "100%"}}>
 
-        <div style={{ float: "left", width: "fit-content" }}>
+
+        <div id={"navDiv"} style={{
+            display: "flex",
+            marginLeft: "35px",
+            backgroundColor: "#D4E2F5",
+            float: "left",
+            width: "500px",
+        height: "165px"}}>
           <nav>
-            <ul>
+            <img src={landingLogo} width={"200px"} height={"158px"}
+            style={{
+              marginTop: "10px",
+              marginLeft: "20px"
+            }}/>
+            <input type="file" id="actual-btn" style={{marginTop:"10px"}}hidden/>
+
+
+            <label htmlFor="actual-btn" style={{
+              backgroundColor: "#2874D6",
+              marginLeft: "145px",
+              float: "right",
+              color: "white",
+              padding: "0.5rem",
+              fontFamily: "sans-serif",
+              borderRadius: "0.3rem",
+              cursor: "pointer",
+              marginTop: "115px"
+            }}>Choose File</label>
+{/*            <ul>
               <li>
-                <Link to="/">File Loader - Third Party</Link>
+                <Link to="/layout">File Loader - Third Party</Link>
               </li>
               <li>
-                <Link to="/fileloaderproprietary">File Loader - Internal</Link>
+                <Link to="/layout/fileloaderproprietary"><img src={fileupload} width={"100px"} height={"50px"}/></Link>
               </li>
               <li>
-                <Link to="/selectionsthirdparty">Selections - Third Party</Link>
+                <Link to="/layout/selectionsthirdparty">Selections - Third Party</Link>
               </li>
               <li>
-                <Link to="/selectionsproprietary">Selections - Internal</Link>
+                <Link to="/layout/selectionsproprietary">Selections - Internal</Link>
               </li>
-            </ul>
+            </ul>*/}
           </nav>
         </div>
 
-
-        </Sidebar>
       </Container>
         <div id={"outletDiv"} style={{
-            display: "flex",
-            marginTop: "20px"
+            display: "flex"
+
         }}>
             <Outlet />
         </div>

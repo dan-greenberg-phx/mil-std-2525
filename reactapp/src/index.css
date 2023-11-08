@@ -21,3 +21,11 @@ code {
   text-decoration: underline;
   cursor: pointer;
 }
+
+label {
+  text-align: left;
+  padding-top: 20px;
+  color: black;
+  font-weight: normal;
+  display: block;
+}
