@@ -3,8 +3,8 @@ import ms from "milsymbol";
 const app = express();
 const port = 3001;
 
-app.get("/getsvg", (req, res) => {
-  res.send(new ms.Symbol(req.get("sidc")).asSVG());
+app.get("/getsvg/:sidc", (req, res) => {
+  res.send(new ms.Symbol(req.params.sidc).asSVG());
 });
 
 app.listen(port, () => {
