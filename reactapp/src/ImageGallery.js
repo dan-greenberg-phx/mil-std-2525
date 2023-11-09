@@ -173,7 +173,7 @@ const ImageGallery = ({
         previousPage={previousPage}
         nextPage={nextPage}
       />
-      {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}
+      {/* {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>} */}
     </div>
   );
 };

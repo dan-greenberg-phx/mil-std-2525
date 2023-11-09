@@ -2,41 +2,41 @@ import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 const Layout = () => {
-  const [openAiQuestion, setOpenAiQuestion] = useState("");
-  const [openAiOutput, setOpenAiOutput] = useState("");
+  // const [openAiQuestion, setOpenAiQuestion] = useState("");
+  // const [openAiOutput, setOpenAiOutput] = useState("");
 
   const url = "http://18.189.126.187:8080";
   // const url = "http://18.119.115.197:8080";
 
-  const askAi = () => {
-    fetch(`${url}/openai?input=${encodeURIComponent(openAiQuestion)}`)
-      .then((response) => response.json())
-      .then((data) => setOpenAiOutput(data.choices[0].message.content))
-      .catch((err) => console.log(err.message));
-  };
+  // const askAi = () => {
+  //   fetch(`${url}/openai?input=${encodeURIComponent(openAiQuestion)}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setOpenAiOutput(data.choices[0].message.content))
+  //     .catch((err) => console.log(err.message));
+  // };
 
   return (
     <div>
-      <div style={{ display: "table", clear: "both", content: "" }}>
-        <div style={{ float: "left", width: "35%" }}>
+      <div>
+        <div>
           <nav>
             <ul>
               <li>
                 <Link to="/">File Loader - Third Party</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/fileloaderproprietary">File Loader - Internal</Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/selectionsthirdparty">Selections - Third Party</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/selectionsproprietary">Selections - Internal</Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </div>
-        <div style={{ float: "left", width: "65%" }}>
+        {/* <div style={{ float: "left", width: "65%" }}>
           <label htmlFor="openai">Got a question? Ask OpenAI</label>
           <textarea
             rows="4"
@@ -48,15 +48,15 @@ const Layout = () => {
           />
           <br />
           <button onClick={askAi}>Ask OpenAI</button>
-        </div>
+        </div> */}
       </div>
-      <div style={{ display: "table", clear: "both", content: "" }}>
-        <div style={{ float: "left", width: "50%" }}>
+      <div>
+        <div>
           <Outlet />
         </div>
-        <div style={{ float: "left", width: "50%" }}>
+        {/* <div style={{ float: "left", width: "50%" }}>
           <p style={{ width: 440 }}>{openAiOutput}</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

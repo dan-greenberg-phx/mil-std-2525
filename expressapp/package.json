@@ -1,0 +1,15 @@
+{
+  "name": "expressapp",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "expressapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "milsymbol": "^2.2.0"
+  }
+}

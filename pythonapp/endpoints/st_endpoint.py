@@ -3,10 +3,19 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 import psycopg2
 import openai
+import sqlalchemy as db
+from sqlalchemy import create_engine, MetaData, Table
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+
+engine = create_engine(
+    "postgresql://postgres:q44%Wjv{32cOTR-buJr*bQIjb{}M@database-1.crloomeekb5b.us-east-2.rds.amazonaws.com:5432/postgres"
+)
+
+metadata = MetaData()
+connection = engine.connect()
 
 
 def get_connection():
@@ -69,8 +78,12 @@ cur.execute(
 modifiertwos = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull sidcs
-cur.execute("SELECT sidc, svg from public.sidc;")
-sidcs = cur.fetchall()
+sidcAlchemy = Table("sidc", metadata, autoload_with=engine)
+query = db.select(sidcAlchemy.columns.sidc, sidcAlchemy.columns.svg)
+result = connection.execute(query)
+sidcs = result.fetchall()
+# cur.execute("SELECT sidc, svg from public.sidc;")
+# sidcs = cur.fetchall()
 
 # close connection
 conn.close()
