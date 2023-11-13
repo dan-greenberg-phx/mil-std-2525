@@ -1,5 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import landingLogo from "./landing-logo-wl.png";
+import logoOnly from "./logo-no-txt.png";
 import { useState } from "react";
 import Layout from "./Layout";
 

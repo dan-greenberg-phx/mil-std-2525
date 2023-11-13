@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import { Gallery } from "react-grid-gallery";
 import ms from "milsymbol";
 
@@ -158,28 +158,65 @@ const ImageGallery = ({
   };
 
   return (
-    <div id={"imgGalleryDiv"} style={{
-      marginTop: "5%",
-      marginLeft: "27%",
-     justifyContent: "center",
-      alignItems: "center"
-    }}>
-      <Gallery
-        images={images}
-        rowHeight={250}
-        enableImageSelection={selectable}
-        onSelect={handleSelect}
-      />
-      <Page
-        imgsPerPage={25}
-        totalImgs={validSidcList.length}
-        paginate={paginate}
-        currentPage={currentPage}
-        previousPage={previousPage}
-        nextPage={nextPage}
-      />
-      {!proprietary && <button onClick={addToDb}>Add to Proprietary dB</button>}
-    </div>
+      <Fragment>
+        <div style={{width: "100%"}}>
+
+          <label style={{}}>
+          </label>
+          <input type="text"  placeholder={"Enter SIDC"} style={{height: "45px"}}></input>
+
+            <button
+                style={{
+                  width: "300px",
+                  height:"45px",
+                  backgroundColor: "beige"
+                }}>Import SIDC(s) From File
+            </button>
+
+
+            {!proprietary && <button onClick={addToDb}
+                                     style={{
+                                       width: "300px",
+                                       height:"45px",
+                                       backgroundColor: "beige"
+
+                                     }}>Add Symbol Database</button>}
+
+            <button
+                style={{
+                  width: "300px",
+                  height:"45px",
+                  backgroundColor: "beige"
+
+
+                }}>Export Symbol
+            </button>
+
+        </div>
+      <div id={"imgGalleryDiv"} style={{
+        marginTop: "5%",
+        marginLeft: "27%",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+
+        <Gallery
+            images={images}
+            rowHeight={250}
+            enableImageSelection={selectable}
+            onSelect={handleSelect}
+        />
+        <Page
+            imgsPerPage={25}
+            totalImgs={validSidcList.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            previousPage={previousPage}
+            nextPage={nextPage}
+        />
+
+      </div>
+        </Fragment>
   );
 };
 

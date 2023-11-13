@@ -4,6 +4,8 @@ import { Container, Header, Footer, Content,
   Sidebar } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import landingLogo from "./landing-logo-wl.png";
+import logoOnly from "./logo-no-txt.png";
+import txtLogo from "./txt-phx-logo.png";
 import fileupload from "./fileupload.png";
 
 const Layout = () => {
@@ -26,23 +28,39 @@ const Layout = () => {
       <Container id={"layoutContainer"}
       style={{
         justifyContent: "left",
-        backgroundColor: "#4b5320",
+       // backgroundImage: "linear-gradient(to right,#4b5320, white)",
+       backgroundColor: "#4b5320",
       width: "100%"}}>
-
-
+        <div  style={{
+          position: "absolute",
+          right: "0",
+          top: "115px"
+        }}>
+        <img src={txtLogo} width={"350px"} height={"94px"}
+/*             style={{
+display: "flex",
+               floar: "right",
+               marginTop: "10px",
+               marginRight: "20px"
+             }}*/
+        />
+        </div>
         <div id={"navDiv"} style={{
             display: "flex",
             marginLeft: "35px",
-            backgroundColor: "#4b5320",
+
+             backgroundColor: "#4b5320",
             float: "left",
             width: "500px",
         height: "165px"}}>
+
           <nav>
-            <img src={landingLogo} width={"200px"} height={"158px"}
+            <img src={logoOnly} width={"200px"} height={"158px"}
             style={{
               marginTop: "10px",
               marginLeft: "20px"
             }}/>
+
             <input type="file" id="actual-btn" style={{marginTop:"10px"}}hidden/>
 
 
