@@ -8,20 +8,7 @@ import "rsuite/dist/rsuite.min.css";
 
 const Selections = ({ proprietary = false }) => {
 
-    const colourStyles = {
-        control: styles => ({ ...styles, backgroundColor: 'white' }),
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            const color = data.color;
-            return {
-                ...styles,
-                backgroundColor: isDisabled ? 'red' : "blue",
-                color: '#FFF',
-                cursor: isDisabled ? 'not-allowed' : 'default',
-
-            };
-        },
-
-    };
+    const [selectedList]=useState([]);
     const [sidcList, setSidcList] = useState([]);
   const [symset, setSymset] = useState({
     options: [],
@@ -249,13 +236,13 @@ const Selections = ({ proprietary = false }) => {
         <label>
           Symbol Set:
           <Select
-
             options={symset.options}
             isSearchable={true}
             value={symset.selection}
             onChange={(selectedoption) =>
-              setSymset({ ...symset, selection: selectedoption })
+              setSymset({ ...symset, selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)})
             }
+
           />
         </label>
         <label>
@@ -265,8 +252,8 @@ const Selections = ({ proprietary = false }) => {
             value={icon.selection}
             isSearchable={true}
             onChange={(selectedoption) =>
-              setIcon({ ...icon, selection: selectedoption })
-            }
+                setIcon({...icon, selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)})}
+
           />
         </label>
         <label>
@@ -277,7 +264,7 @@ const Selections = ({ proprietary = false }) => {
             isSearchable={true}
             isClearable={true}
             onChange={(selectedoption) =>
-              setFirstid({ ...firstid, selection: selectedoption })
+              setFirstid({ ...firstid, selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)})
             }
           />
         </label>
@@ -291,7 +278,7 @@ const Selections = ({ proprietary = false }) => {
             onChange={(selectedoption) =>
               setAffiliation({
                 ...affiliation,
-                selection: selectedoption,
+                selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)
               })
             }
           />
@@ -306,7 +293,7 @@ const Selections = ({ proprietary = false }) => {
             onChange={(selectedoption) =>
               setStatus({
                 ...status,
-                selection: selectedoption,
+                selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)
               })
             }
           />
@@ -321,7 +308,7 @@ const Selections = ({ proprietary = false }) => {
             onChange={(selectedoption) =>
               setHqtfdummy({
                 ...hqtfdummy,
-                selection: selectedoption,
+                selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)
               })
             }
           />
@@ -337,7 +324,7 @@ const Selections = ({ proprietary = false }) => {
             onChange={(selectedoption) =>
               setEchelonmobility({
                 ...echelonmobility,
-                selection: selectedoption,
+                selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)
               })
             }
           />
@@ -350,7 +337,7 @@ const Selections = ({ proprietary = false }) => {
             value={modifierone.selection}
             isSearchable={true}
             onChange={(selectedoption) =>
-              setModifierone({ ...modifierone, selection: selectedoption })
+              setModifierone({ ...modifierone, selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label) })
             }
           />
         </label>
@@ -363,7 +350,7 @@ const Selections = ({ proprietary = false }) => {
             value={modifiertwo.selection}
             isSearchable={true}
             onChange={(selectedoption) =>
-              setModifiertwo({ ...modifiertwo, selection: selectedoption })
+              setModifiertwo({ ...modifiertwo, selection: selectedoption,...selectedList.push(Array(selectedoption).pop().label)})
             }
           />
         </label>
@@ -374,25 +361,24 @@ const Selections = ({ proprietary = false }) => {
 
       </div>
           <div id={"selImgDiv"}
-          style={{
-                backgroundColor: "#F4F6F7",
-              flexGrow: "1",
-
-              justifyContent: "center",
-              alignItems: "center"
-          }}>
+               style={{
+                   backgroundColor: "#F4F6F7",
+                   flexGrow: "1",
+                   justifyContent: "center",
+                   alignItems: "center"
+               }}>
               {sidcList.length > 0 && (
 
-                  <ImageGallery   id={"imgGal"}  style={{
+                  <ImageGallery id={"imgGal"} style={{
                       justifyContent: "center",
-                  alignItems: "center"}}
-                      key={proprietary}
-                      proprietary={proprietary}
-                      sidcList={sidcList}
+                      alignItems: "center"
+                  }}
+                                key={proprietary}
+                                proprietary={proprietary}
+                                sidcList={sidcList}
+                                selectionsList={selectedList.toString().replace(/,/g,'\n')}
                   />
-
-
-    )}
+              )}
           </div>
       </Fragment>
   );

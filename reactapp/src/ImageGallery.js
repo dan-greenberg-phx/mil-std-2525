@@ -1,6 +1,7 @@
 import React, {useState, useEffect, Fragment} from "react";
 import { Gallery } from "react-grid-gallery";
 import ms from "milsymbol";
+import "./index.css";
 
 import Page from "./Page";
 
@@ -8,6 +9,7 @@ import Page from "./Page";
 const url = "http://localhost:8080";
 
 const ImageGallery = ({
+    selectionsList,
   sidcList,
   proprietary = false,
   selectable = false,
@@ -18,7 +20,7 @@ const ImageGallery = ({
   const [images, setImages] = useState([]);
   const [proprietarySvgs, setProprietarySvgs] = useState({});
   const [proprietarySidcs, setProprietarySidcs] = useState(new Set());
-
+    //console.log(selectionsList);
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
@@ -53,6 +55,7 @@ const ImageGallery = ({
   }, []);
 
   useEffect(() => {
+
     setImages(
       validSidcList
         .slice(25 * (currentPage - 1), 25 * currentPage)
@@ -63,9 +66,11 @@ const ImageGallery = ({
             src: `data:image/svg+xml;utf8,${encodeURIComponent(
               proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
             )}`,
-            caption: sidc,
+
+            caption: sidc+'\n'+selectionsList,
             isSelected: false,
           };
+
         })
     );
   }, [validSidcList, currentPage, proprietarySvgs, proprietary]);
@@ -163,30 +168,58 @@ const ImageGallery = ({
 
           <label style={{}}>
           </label>
-          <input type="text"  placeholder={"Enter SIDC"} style={{height: "45px"}}></input>
+          <input type="text"  placeholder={"Enter SIDC"} style={{height: "45px",
+          borderColor: "#818761"}}></input>
 
             <button
                 style={{
-                  width: "300px",
-                  height:"45px",
-                  backgroundColor: "beige"
+                  backgroundColor: "#818761",
+                  border: "none", borderRadius: "8px",
+                  height: "45px",
+                  width: "200px",
+                  color: "white",
+                  textAlign: "center",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  fontSize: "16px",
+                  margin: "6px 4px",
+                  cursor: "pointer"
+
                 }}>Import SIDC(s) From File
             </button>
 
 
             {!proprietary && <button onClick={addToDb}
                                      style={{
-                                       width: "300px",
-                                       height:"45px",
-                                       backgroundColor: "beige"
+                                       backgroundColor: "#818761",
+                                         borderRadius: "8px",
+                                       border: "none",
+                                       width: "200px",
+                                       height: "45px",
+                                       color: "white",
+                                       textAlign: "center",
+                                       textDecoration: "none",
+                                       display: "inline-block",
+                                       fontSize: "16px",
+                                       margin: "6px 4px",
+                                       cursor: "pointer"
 
                                      }}>Add Symbol Database</button>}
 
             <button
                 style={{
-                  width: "300px",
-                  height:"45px",
-                  backgroundColor: "beige"
+                  backgroundColor: "#818761",
+                  border: "none",
+                    borderRadius: "8px",
+                  height: "45px",
+                  width: "200px",
+                  color: "white",
+                  textAlign: "center",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  fontSize: "16px",
+                  margin: "6px 4px",
+                  cursor: "pointer"
 
 
                 }}>Export Symbol
