@@ -11,10 +11,10 @@ api = Api(app)
 
 def get_connection():
     return psycopg2.connect(
-        host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
-        database="postgres",
-        user="postgres",
-        password="q44%Wjv{32cOTR-buJr*bQIjb{}M",
+        host="localhost",
+        database="srs",
+        user="srs",
+        password="srs",
     )
 
 
@@ -23,53 +23,53 @@ conn = get_connection()
 cur = conn.cursor()
 
 # pull symbol
-cur.execute("SELECT symbolset, symbolsetname FROM public.symbolset;")
+cur.execute("SELECT symbolset, symbolsetname FROM symbolset;")
 symbols = cur.fetchall()
 
 # pull icon
 cur.execute(
-    "SELECT symbolset, JSON_AGG(ARRAY[code, entity||' '||entity_type||' '||entity_subtype]) FROM public.icon GROUP BY symbolset;"
+    "SELECT symbolset, JSON_AGG(ARRAY[code, entity||' '||entity_type||' '||entity_subtype]) FROM icon GROUP BY symbolset;"
 )
 icons = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull firstid
-cur.execute("SELECT code, description FROM public.firstid;")
+cur.execute("SELECT code, description FROM firstid;")
 firstids = cur.fetchall()
 
 # pull affiliation
-cur.execute("SELECT code, description FROM public.affiliation;")
+cur.execute("SELECT code, description FROM affiliation;")
 affiliations = cur.fetchall()
 
 # pull status
-cur.execute("SELECT status, description FROM public.status;")
+cur.execute("SELECT status, description FROM status;")
 statuses = cur.fetchall()
 
 # pull hqtfdummy
 cur.execute(
-    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.hqtfdummy GROUP BY symbolset;"
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM hqtfdummy GROUP BY symbolset;"
 )
 hqtfdummys = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull echelonmobility
 cur.execute(
-    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.echelonmobility GROUP BY symbolset;"
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM echelonmobility GROUP BY symbolset;"
 )
 echelonmobilities = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull modifierone
 cur.execute(
-    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.modifierone GROUP BY symbolset;"
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM modifierone GROUP BY symbolset;"
 )
 modifierones = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull modifiertwo
 cur.execute(
-    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM public.modifiertwo GROUP BY symbolset;"
+    "SELECT symbolset, JSON_AGG(ARRAY[code, description]) FROM modifiertwo GROUP BY symbolset;"
 )
 modifiertwos = {data[0]: data[1] for data in cur.fetchall()}
 
 # pull sidcs
-cur.execute("SELECT sidc, svg from public.sidc;")
+cur.execute("SELECT sidc, svg from sidc;")
 sidcs = cur.fetchall()
 
 # close connection
@@ -80,7 +80,7 @@ def refresh_sidcs():
     global sidcs
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT sidc, svg from public.sidc;")
+    cur.execute("SELECT sidc, svg from sidc;")
     sidcs = cur.fetchall()
     conn.close()
 
@@ -127,7 +127,7 @@ class HQTFDummy(Resource):
     def get(self):
         result = hqtfdummys.get(request.args.get("sym"))
         return (
-            result if result is not None else [["0", "not applicable"]],
+            result if result is not None else [["0", "NOT APPLICABLE"]],
             200,
         )
 
@@ -136,7 +136,7 @@ class EchelonMobility(Resource):
     def get(self):
         result = echelonmobilities.get(request.args.get("sym"))
         return (
-            result if result is not None else [["00", "unspecified"]],
+            result if result is not None else [["00", "UNSPECIFIED"]],
             200,
         )
 
@@ -144,13 +144,13 @@ class EchelonMobility(Resource):
 class ModifierOne(Resource):
     def get(self):
         result = modifierones.get(request.args.get("sym"))
-        return (result if result is not None else [["00", "Unspecified"]], 200)
+        return (result if result is not None else [["00", "UNSPECIFIED"]], 200)
 
 
 class ModifierTwo(Resource):
     def get(self):
         result = modifiertwos.get(request.args.get("sym"))
-        return (result if result is not None else [["00", "Unspecified"]], 200)
+        return (result if result is not None else [["00", "UNSPECIFIED"]], 200)
 
 
 class ValidSidc(Resource):
@@ -179,7 +179,7 @@ class Sidc(Resource):
             ]
         )
         post_data(
-            f"INSERT INTO public.sidc (sidc, svg) VALUES {vals} ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
+            f"INSERT INTO sidc (sidc, svg) VALUES {vals} ON CONFLICT (sidc) DO UPDATE SET svg = EXCLUDED.svg;",
         )
         # conn = get_connection()
         # cur = conn.cursor()

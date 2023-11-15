@@ -376,7 +376,7 @@ const Selections = ({ proprietary = false }) => {
                                 key={proprietary}
                                 proprietary={proprietary}
                                 sidcList={sidcList}
-                                selectionsList={selectedList.toString().replace(/,/g,'\n')}
+                                selectionsList={selectedList.toString().replace(/,/g,'\n').toUpperCase()}
                   />
               )}
           </div>

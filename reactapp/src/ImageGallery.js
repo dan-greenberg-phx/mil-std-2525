@@ -15,6 +15,7 @@ const ImageGallery = ({
   selectable = false,
   getSelectedImages = (selectedImages) => {},
 }) => {
+    let SYMBOL ="";
   const [currentPage, setCurrentPage] = useState(1);
   const [validSidcList, setValidSidcList] = useState([]);
   const [images, setImages] = useState([]);
@@ -68,7 +69,9 @@ const ImageGallery = ({
             )}`,
 
             caption: sidc+'\n'+selectionsList,
-            isSelected: false,
+            isSelected: false,...SYMBOL=`data:image/svg+xml;utf8,${encodeURIComponent(
+                  proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
+              )}`,
           };
 
         })
@@ -220,9 +223,9 @@ const ImageGallery = ({
                   fontSize: "16px",
                   margin: "6px 4px",
                   cursor: "pointer"
-
-
-                }}>Export Symbol
+            }}
+            script={console.log(SYMBOL)}
+            >Export Symbol
             </button>
 
         </div>
@@ -233,7 +236,7 @@ const ImageGallery = ({
         alignItems: "center"
       }}>
 
-        <Gallery
+        <Gallery id={"gal"}
             images={images}
             rowHeight={250}
             enableImageSelection={selectable}
