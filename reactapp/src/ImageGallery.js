@@ -2,6 +2,7 @@ import React, {useState, useEffect, Fragment} from "react";
 import { Gallery } from "react-grid-gallery";
 import ms from "milsymbol";
 import "./index.css";
+import ReactModal from 'react-modal';
 
 import Page from "./Page";
 
@@ -16,6 +17,7 @@ const ImageGallery = ({
   getSelectedImages = (selectedImages) => {},
 }) => {
     let SYMBOL ="";
+    const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [validSidcList, setValidSidcList] = useState([]);
   const [images, setImages] = useState([]);
@@ -165,14 +167,75 @@ const ImageGallery = ({
     getSelectedImages(nextImages.filter((image) => image.isSelected));
   };
 
+   function handleCloseModal () {
+        this.setState({ showModal: false });
+    }
+
   return (
       <Fragment>
         <div style={{width: "100%"}}>
 
-          <label style={{}}>
-          </label>
-          <input type="text"  placeholder={"Enter SIDC"} style={{height: "45px",
-          borderColor: "#818761"}}></input>
+          <button style={{
+              backgroundColor: "#818761",
+              border: "none", borderRadius: "8px",
+              height: "45px",
+              width: "200px",
+              color: "white",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "16px",
+              margin: "6px 4px",
+              cursor: "pointer"
+
+          }}onClick={() => setIsOpen(true)}>
+              Enter SIDC
+          </button>
+
+            <ReactModal
+                isOpen={isOpen}
+                contentLabel="Example Modal"
+                style={{
+                    overlay: {
+                        backgroundColor: '#818761',
+                        width: "290px",
+                        height: "120px",
+                        position: "absolute",
+                        top: "25%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
+
+                    },
+                    content: {
+                        width: "300px",
+                        height: "130px",
+                        color: 'black',
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
+                    }
+                }}
+
+            >
+                <input id="sidcInput" type="text"  placeholder={"Enter SIDC"} style={{height: "45px",
+                    borderColor: "#818761"}}></input>
+                <button
+                   style={{ backgroundColor: "#818761",
+                border: "none", borderRadius: "8px",
+                height: "25px",
+                width: "100px",
+                color: "white",
+                textAlign: "center",
+                textDecoration: "none",
+                display: "inline-block",
+                fontSize: "14px",
+                margin: "6px 4px",
+                cursor: "pointer"}}
+                    onClick={() => setIsOpen(false)}>Get Symbol</button>
+               </ReactModal>
+
+
 
             <button
                 style={{
