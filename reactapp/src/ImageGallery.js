@@ -23,7 +23,7 @@ const ImageGallery = ({
   const [images, setImages] = useState([]);
   const [proprietarySvgs, setProprietarySvgs] = useState({});
   const [proprietarySidcs, setProprietarySidcs] = useState(new Set());
-    //console.log(selectionsList);
+
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
@@ -58,6 +58,7 @@ const ImageGallery = ({
   }, []);
 
   useEffect(() => {
+console.log("validSidcList: "+validSidcList);
 
     setImages(
       validSidcList
@@ -69,8 +70,8 @@ const ImageGallery = ({
             src: `data:image/svg+xml;utf8,${encodeURIComponent(
               proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
             )}`,
-
-            caption: sidc+'\n'+selectionsList,
+             
+            caption: sidc+'\n'+formatSymbolMetadata(sidc),
             isSelected: false,...SYMBOL=`data:image/svg+xml;utf8,${encodeURIComponent(
                   proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
               )}`,
@@ -94,6 +95,7 @@ const ImageGallery = ({
   };
 
   async function addToDb() {
+
     const abortController = new AbortController();
     const { signal } = abortController;
     const sidcMapping = validSidcList.map((validsidc) => {
@@ -147,6 +149,26 @@ const ImageGallery = ({
     //   });
   }
 
+    async function downloadSymbol() {
+ //       console.log(document.getElementsByClassName("ReactGridGallery_tile-viewport")
+   //         .item(0).getElementsByTagName("img").item(0).getAttribute("src"));
+        let imgEl = document.getElementsByClassName("ReactGridGallery_tile-viewport")
+            .item(0).getElementsByTagName("img").item(0);
+        let symUrl = document.getElementsByClassName("ReactGridGallery_tile-viewport")
+            .item(0).getElementsByTagName("img").item(0).getAttribute("src");
+        const d = document.createElement("input");
+        d.style.width = "500px";
+        d.style.height = "fit-content";
+        d.type = "submit";
+        const a = document.createElement('a');
+        a.href = symUrl;
+        //a.download = symUrl.split('/').pop();
+        a.download = "your-symbol-name";
+        d.append(a);
+        document.body.appendChild(d);
+        a.click();
+        document.body.removeChild(d);
+    }
   const previousPage = () => {
     if (currentPage !== 1) {
       setCurrentPage(currentPage - 1);
@@ -171,11 +193,64 @@ const ImageGallery = ({
         this.setState({ showModal: false });
     }
 
+ function formatSymbolMetadata(sidc){
+       let output = "";
+       let msSymbol = new ms.Symbol(sidc);
+       output+= "SIDC: " +sidc+"\n";
+       output+= "Unit: " +msSymbol.getMetadata().unit+"\n";
+       output+= "Affiliation: " +msSymbol.getMetadata().affiliation+"\n";
+     output+= "BaseAffiliation: " +msSymbol.getMetadata().baseAffilation+"\n";
+       output+= "Dimension: " +msSymbol.getMetadata().dimension+"\n";
+     output+= "BaseDimension: " +msSymbol.getMetadata().baseDimension+"\n";
+       output+= "Context: " +msSymbol.getMetadata().context+"\n";
+     output+= "Condition: " +msSymbol.getMetadata().condition+"\n";
+     output+= "Echelon: " +msSymbol.getMetadata().echelon+"\n";
+     output+= "Mobility: " +msSymbol.getMetadata().mobility+"\n";
+
+
+       return output;
+    }
+async function genSymbolFromSidc(){
+    setIsOpen(false)
+let provSidc = document.getElementById("sidcInput").value;
+ let   thisSymbolImg = new ms.Symbol(provSidc);
+       console.log("provided SIDC: "+provSidc);
+       let metadata = formatSymbolMetadata(provSidc);
+       console.log(metadata);
+      validSidcList.pop();
+validSidcList.push(provSidc);
+    setCurrentPage(1);
+    setImages(
+        validSidcList
+            .slice(25 * (currentPage - 1), 25 * currentPage)
+            .map((provSidc) => {
+                return {
+                    width: 75,
+                    height: 60,
+                    src: `data:image/svg+xml;utf8,${encodeURIComponent(
+                        proprietary ? proprietarySvgs[provSidc] : thisSymbolImg.asSVG()
+                    )}`,
+
+                    caption: provSidc+'\n'+ metadata,
+                    isSelected: false,...SYMBOL=`data:image/svg+xml;utf8,${encodeURIComponent(
+                        proprietary ? proprietarySvgs[provSidc] : thisSymbolImg.asSVG()
+                    )}`,
+                };
+
+            })
+    );
+
+
+   }
+
   return (
       <Fragment>
         <div style={{width: "100%"}}>
-
-          <button style={{
+            {/*
+            30001120000000000000
+            30021100001102000500
+             */}
+          <button id={"sidcButton"} style={{
               backgroundColor: "#818761",
               border: "none", borderRadius: "8px",
               height: "45px",
@@ -232,7 +307,8 @@ const ImageGallery = ({
                 fontSize: "14px",
                 margin: "6px 4px",
                 cursor: "pointer"}}
-                    onClick={() => setIsOpen(false)}>Get Symbol</button>
+                    onClick={genSymbolFromSidc}>Get Symbol
+                </button>
                </ReactModal>
 
 
@@ -270,9 +346,9 @@ const ImageGallery = ({
                                        margin: "6px 4px",
                                        cursor: "pointer"
 
-                                     }}>Add Symbol Database</button>}
+                                     }} >Add Symbol Database</button>}
 
-            <button
+            <button onClick={downloadSymbol}
                 style={{
                   backgroundColor: "#818761",
                   border: "none",
@@ -287,8 +363,7 @@ const ImageGallery = ({
                   margin: "6px 4px",
                   cursor: "pointer"
             }}
-            script={console.log(SYMBOL)}
-            >Export Symbol
+            >Download Symbol
             </button>
 
         </div>
