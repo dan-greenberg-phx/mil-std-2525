@@ -1,0 +1,42 @@
+---
+openapi: 3.1.1
+info:
+  title: Get SVG
+  summary: Return the SVG tag when given an SIDC
+  description: |-
+    # Introduction
+
+    Given an SIDC, this endpoint returns the SVG tag
+
+    # Overview
+
+    Use the URL with a /getsvg/{sidc}
+
+    # Authentication
+
+    HTTP GET request
+
+    # Error Codes
+
+    200 means successful return
+
+    # Rate limit
+
+    None
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+  version: 1.0.1
+servers:
+- url: http://18.189.126.187:3001
+paths:
+  /getsvg/{sidc}:
+    get:
+      description: Gets the SVG based on the given SIDC
+      responses:
+        "200":
+          description: The SVG tag
+      parameters:
+      - name: sidc
+        in: path
+        required: true
+        schema:
+          type: string
