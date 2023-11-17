@@ -61,7 +61,7 @@ display: "flex",
               marginLeft: "20px"
             }}/>
 
-            <input type="file" id="actual-btn" style={{marginTop:"10px"}}hidden/>
+ {/*           <input type="file" id="actual-btn" style={{marginTop:"10px"}}hidden/>
 
 
             <label htmlFor="actual-btn" style={{
@@ -74,7 +74,7 @@ display: "flex",
               borderRadius: "0.3rem",
               cursor: "pointer",
               marginTop: "115px"
-            }}>Choose File</label>
+            }}>Choose File</label>*/}
 {/*            <ul>
               <li>
                 <Link to="/layout">File Loader - Third Party</Link>
