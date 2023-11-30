@@ -5,7 +5,7 @@ const app = express();
 const port = 3001;
 
 app.get("/getsvg/:sidc", (req, res) => {
-  res.send(new ms.Symbol(req.params.sidc).asSVG());
+  res.send(new ms.Symbol(req.params.sidc.replace(/-/g, "")).asSVG());
 });
 
 http.createServer(app).listen(port, () => {

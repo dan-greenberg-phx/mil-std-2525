@@ -70,13 +70,17 @@ const ImageGallery = ({
             width: 75,
             height: 60,
             src: `data:image/svg+xml;utf8,${encodeURIComponent(
-              proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
+              proprietary
+                ? proprietarySvgs[sidc]
+                : new ms.Symbol(sidc.replace(/-/g, "")).asSVG()
             )}`,
 
             caption: sidc + "\n" + formatSymbolMetadata(sidc),
             isSelected: false,
             ...(SYMBOL = `data:image/svg+xml;utf8,${encodeURIComponent(
-              proprietary ? proprietarySvgs[sidc] : new ms.Symbol(sidc).asSVG()
+              proprietary
+                ? proprietarySvgs[sidc]
+                : new ms.Symbol(sidc.replace(/-/g, "")).asSVG()
             )}`),
           };
         })
@@ -249,7 +253,7 @@ const ImageGallery = ({
 
   async function genSymbolFromSidc() {
     let provSidc = document.getElementById("sidcInput").value;
-    let thisSymbolImg = new ms.Symbol(provSidc);
+    let thisSymbolImg = new ms.Symbol(provSidc.replace(/-/g, ""));
     console.log("provided SIDC: " + provSidc);
     let metadata = formatSymbolMetadata(provSidc);
     console.log(metadata);
