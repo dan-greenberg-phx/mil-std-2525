@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Select from "react-select";
 import ImageGallery from "./ImageGallery";
 
+import "rsuite/dist/rsuite.min.css";
+
 const Selections = ({ proprietary = false }) => {
+  const [selectedList] = useState([]);
   const [sidcList, setSidcList] = useState([]);
   const [symset, setSymset] = useState({
     options: [],
@@ -39,7 +42,7 @@ const Selections = ({ proprietary = false }) => {
   });
 
   const url = "http://18.189.126.187:8080";
-  // const url = "http://18.119.115.197:8080";
+  // const url = "http://localhost:8080";
 
   useEffect(() => {
     // load symbol sets
@@ -213,135 +216,197 @@ const Selections = ({ proprietary = false }) => {
   ]);
 
   return (
-    <div style={{ width: 380, display: "table", content: "", clear: "both" }}>
-      <br />
-      <form>
-        <label>
-          Symbol Set:
-          <Select
-            options={symset.options}
-            isSearchable={true}
-            value={symset.selection}
-            onChange={(selectedoption) =>
-              setSymset({ ...symset, selection: selectedoption })
-            }
+    <Fragment>
+      <div
+        id={"selectionsDiv"}
+        style={{
+          marginLeft: "35px",
+          width: "500px",
+          height: "1000px",
+          backgroundColor: "beige",
+        }}
+      >
+        <br />
+        <form
+          style={{
+            width: "450px",
+            marginLeft: "25px",
+            marginRight: "25px",
+          }}
+        >
+          <label>
+            Symbol Set:
+            <Select
+              options={symset.options}
+              isSearchable={true}
+              value={symset.selection}
+              onChange={(selectedoption) =>
+                setSymset({
+                  ...symset,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Icon:
+            <Select
+              options={icon.options}
+              value={icon.selection}
+              isSearchable={true}
+              onChange={(selectedoption) =>
+                setIcon({
+                  ...icon,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Reality/Exercise/Simulation:
+            <Select
+              options={firstid.options}
+              value={firstid.selection}
+              isSearchable={true}
+              isClearable={true}
+              onChange={(selectedoption) =>
+                setFirstid({
+                  ...firstid,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Affiliation:
+            <Select
+              options={affiliation.options}
+              value={affiliation.selection}
+              isSearchable={true}
+              isClearable={true}
+              onChange={(selectedoption) =>
+                setAffiliation({
+                  ...affiliation,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Status:
+            <Select
+              options={status.options}
+              value={status.selection}
+              isSearchable={true}
+              isClearable={true}
+              onChange={(selectedoption) =>
+                setStatus({
+                  ...status,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            HQ/TF/Dummy:
+            <Select
+              options={hqtfdummy.options}
+              value={hqtfdummy.selection}
+              isSearchable={true}
+              isClearable={true}
+              onChange={(selectedoption) =>
+                setHqtfdummy({
+                  ...hqtfdummy,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Echelon/Mobility:
+            <Select
+              menuPlacement={"top"}
+              options={echelonmobility.options}
+              value={echelonmobility.selection}
+              isSearchable={true}
+              isClearable={true}
+              onChange={(selectedoption) =>
+                setEchelonmobility({
+                  ...echelonmobility,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Modifier 1:
+            <Select
+              menuPlacement={"top"}
+              options={modifierone.options}
+              value={modifierone.selection}
+              isSearchable={true}
+              onChange={(selectedoption) =>
+                setModifierone({
+                  ...modifierone,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+          <label>
+            Modifier 2:
+            <Select
+              menuPlacement={"top"}
+              options={modifiertwo.options}
+              value={modifiertwo.selection}
+              isSearchable={true}
+              onChange={(selectedoption) =>
+                setModifiertwo({
+                  ...modifiertwo,
+                  selection: selectedoption,
+                  ...selectedList.push(Array(selectedoption).pop().label),
+                })
+              }
+            />
+          </label>
+        </form>
+        <br />
+      </div>
+      <div
+        id={"selImgDiv"}
+        style={{
+          backgroundColor: "#F4F6F7",
+          flexGrow: "1",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {sidcList.length > 0 && (
+          <ImageGallery
+            id={"imgGal"}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            key={proprietary}
+            proprietary={proprietary}
+            sidcList={sidcList}
+            selectionsList={selectedList
+              .toString()
+              .replace(/,/g, "\n")
+              .toUpperCase()}
           />
-        </label>
-        <label>
-          Icon:
-          <Select
-            options={icon.options}
-            value={icon.selection}
-            isSearchable={true}
-            onChange={(selectedoption) =>
-              setIcon({ ...icon, selection: selectedoption })
-            }
-          />
-        </label>
-        <label>
-          Reality/Exercise/Simulation:
-          <Select
-            options={firstid.options}
-            value={firstid.selection}
-            isSearchable={true}
-            isClearable={true}
-            onChange={(selectedoption) =>
-              setFirstid({ ...firstid, selection: selectedoption })
-            }
-          />
-        </label>
-        <label>
-          Affiliation:
-          <Select
-            options={affiliation.options}
-            value={affiliation.selection}
-            isSearchable={true}
-            isClearable={true}
-            onChange={(selectedoption) =>
-              setAffiliation({
-                ...affiliation,
-                selection: selectedoption,
-              })
-            }
-          />
-        </label>
-        <label>
-          Status:
-          <Select
-            options={status.options}
-            value={status.selection}
-            isSearchable={true}
-            isClearable={true}
-            onChange={(selectedoption) =>
-              setStatus({
-                ...status,
-                selection: selectedoption,
-              })
-            }
-          />
-        </label>
-        <label>
-          HQ/TF/Dummy:
-          <Select
-            options={hqtfdummy.options}
-            value={hqtfdummy.selection}
-            isSearchable={true}
-            isClearable={true}
-            onChange={(selectedoption) =>
-              setHqtfdummy({
-                ...hqtfdummy,
-                selection: selectedoption,
-              })
-            }
-          />
-        </label>
-        <label>
-          Echelon/Mobility:
-          <Select
-            options={echelonmobility.options}
-            value={echelonmobility.selection}
-            isSearchable={true}
-            isClearable={true}
-            onChange={(selectedoption) =>
-              setEchelonmobility({
-                ...echelonmobility,
-                selection: selectedoption,
-              })
-            }
-          />
-        </label>
-        <label>
-          Modifier 1:
-          <Select
-            options={modifierone.options}
-            value={modifierone.selection}
-            isSearchable={true}
-            onChange={(selectedoption) =>
-              setModifierone({ ...modifierone, selection: selectedoption })
-            }
-          />
-        </label>
-        <label>
-          Modifier 2:
-          <Select
-            options={modifiertwo.options}
-            value={modifiertwo.selection}
-            isSearchable={true}
-            onChange={(selectedoption) =>
-              setModifiertwo({ ...modifiertwo, selection: selectedoption })
-            }
-          />
-        </label>
-      </form>
-      <br />
-      {sidcList.length > 0 && (
-        <ImageGallery
-          key={proprietary}
-          proprietary={proprietary}
-          sidcList={sidcList}
-        />
-      )}
-    </div>
+        )}
+      </div>
+    </Fragment>
   );
 };
 

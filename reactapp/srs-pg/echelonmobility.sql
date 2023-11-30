@@ -1,0 +1,42 @@
+begin;
+
+CREATE TABLE IF NOT EXISTS echelonmobility
+(
+    code VARCHAR NOT NULL,
+    description VARCHAR,
+    symbolset VARCHAR NOT NULL
+);
+
+INSERT INTO echelonmobility (symbolset,code,description) VALUES ('10','00','UNSPECIFIED'),
+('10','11','TEAM/CREW'),
+('10','12','SQUAD'),
+('10','13','SECTION'),
+('10','14','PLATOON/DETACHMENT'),
+('10','15','COMPANY/BATTERY/TROOP'),
+('10','16','BATALLION/SQUADRON'),
+('10','17','REGIMENT/GROUP'),
+('10','18','BRIGADE'),
+('10','21','DIVISION'),
+('10','22','CORPS/MEF'),
+('10','23','ARMY'),
+('10','24','ARMY GROUP/FRONT'),
+('10','25','REGION/THEATER'),
+('10','26','COMMAND'),
+('15','00','UNSPECIFIED'),
+('15','31','WHEELED LIMITED CROSS COUNTRY'),
+('15','32','WHEELED CROSS COUNTRY'),
+('15','33','TRACKED'),
+('15','34','WHEELED AND TRACKED COMBINATION'),
+('15','35','TOWED'),
+('15','36','RAILWAY'),
+('15','37','PACK ANIMALS'),
+('15','41','OVER SNOW (PRIME MOVER)'),
+('15','42','SLED'),
+('15','51','BARGE'),
+('15','52','AMPHIBIOUS'),
+('27','00','UNSPECIFIED'),
+('27','71','LEADER'),
+('30','00','UNSPECIFIED'),
+('30','61','SHORT TOWED ARRAY'),
+('30','62','LONG TOWED ARRAY');
+commit;
