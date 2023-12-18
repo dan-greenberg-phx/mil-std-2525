@@ -11,7 +11,7 @@ CORS(app)
 api = Api(app)
 
 engine = create_engine(
-    "postgresql://postgres:1W>>ayhX6JI?u8]xD|!hHAvr&7w7@database-1.crloomeekb5b.us-east-2.rds.amazonaws.com:5432/postgres"
+    "postgresql://postgres:waHZcI2s.P(ySdOi95-7_<$ZG$QG@database-1.crloomeekb5b.us-east-2.rds.amazonaws.com:5432/postgres"
 )
 
 metadata = MetaData()
@@ -23,7 +23,7 @@ def get_connection():
         host="database-1.crloomeekb5b.us-east-2.rds.amazonaws.com",
         database="postgres",
         user="postgres",
-        password="1W>>ayhX6JI?u8]xD|!hHAvr&7w7",
+        password="waHZcI2s.P(ySdOi95-7_<$ZG$QG",
     )
 
 
